@@ -20,3 +20,5 @@ sreflectance:
 	./raytracer "Sample Scenes/Input Files/simple_reflectance.xml"
 onebyone:
 	make all && make run && make sshading && make sreflectance && make bunny && make cornellbox && make mirror_spheres  && make killeroo && make horseandmug 
+horse:
+	./raytracer "hw2_sample_scenes/horse.xml"

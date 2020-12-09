@@ -14,10 +14,25 @@ using namespace parser;
 //     cout << t; 
 // }
 
-Scene idleriDuzelt(Scene scene){
+std::vector<Transformation> getTransformationVectorFromString(std::string transformations){//TODO//Added newly
+    string tmp = "";
+    for(auto c:transformations){
+
+        if(c==' '){
+
+        }else{
+
+        }
+    }
+}
+
+Scene idleriDuzelt(Scene scene){//TODO transformaiton idleri
     
     for(int i=0;i< scene.meshes.size();i++){
         scene.meshes[i].material_id--;
+        scene.meshes[i].texture_id--;
+        //cout << scene.meshes[i].transformations<<endl;
+        scene.meshes[i].transformasyonlar = getTransformationVectorFromString(scene.meshes[i].transformations);
         for(int j=0;j<scene.meshes[i].faces.size();j++){
             scene.meshes[i].faces[j].v0_id--;
             scene.meshes[i].faces[j].v1_id--;
@@ -29,13 +44,19 @@ Scene idleriDuzelt(Scene scene){
         scene.triangles[i].indices.v0_id--;
         scene.triangles[i].indices.v1_id--;
         scene.triangles[i].indices.v2_id--;
+        scene.triangles[i].texture_id--;
+        //cout << scene.triangles[i].transformations<<endl;
     }
     for(int i=0;i<scene.spheres.size();i++){
         scene.spheres[i].center_vertex_id--;
         scene.spheres[i].material_id--;
+        scene.spheres[i].texture_id--;
+        //cout << scene.spheres[i].transformations<<endl;
     }
+
     // for(int i=0;i<scene.cameras;i++)
     //     scene.cameras[i].;
+    //throw ("deneme");
     return scene;
 }
 RaySabitleri rayiHazirla(const Camera &cam){
@@ -77,6 +98,7 @@ void threadable(int i, int to,const Scene &scene,const RaySabitleri &raySabitler
             //     std::cout << ray.yon.y << " ";
             //     std::cout << ray.yon.z << std::endl;
             // }
+            //TODO transformasyonlari burada uygula
             Vec3i pixel = checkWhatCollides(ray,scene);//bir pixel
 
             image[i*width*3+3*j  ] =(unsigned char)  pixel.x; 

@@ -92,8 +92,41 @@ matrix4x4 matrix4x4_Multiply(matrix4x4 mat1, matrix4x4 mat2){
     return res;
 }
 
-matrix4x4 matrix4x4_Multiply(){
-    
+
+//Added newly
+Vec4f matrix4x4_Vec4f_Multiply(matrix4x4 mat, Vec4f v){ //done with best performing algorithm
+    Vec4f res;
+    res.x = mat.mat[0][0]*v.x + mat.mat[0][1]*v.y + mat.mat[0][2]*v.z + mat.mat[0][3]*v.w;
+    res.y = mat.mat[1][0]*v.x + mat.mat[1][1]*v.y + mat.mat[1][2]*v.z + mat.mat[1][3]*v.w;
+    res.z = mat.mat[2][0]*v.x + mat.mat[2][1]*v.y + mat.mat[2][2]*v.z + mat.mat[2][3]*v.w;
+    res.w = mat.mat[3][0]*v.x + mat.mat[3][1]*v.y + mat.mat[3][2]*v.z + mat.mat[3][3]*v.w;
+    return res;
+}
+
+
+Vec3f rotate(Vec3f ilkhal, float aci, Vec3f vector){//TODO
+
+}
+
+Vec3f scale(Vec3f  point, Vec3f scalingVector){///DONE
+    Vec3f res;
+    res.x = point.x * scalingVector.x;
+    res.y = point.y * scalingVector.y;
+    res.z = point.z * scalingVector.z;
+
+}
+Sphere scale(Sphere sphere, Vec3f scalingVector){//DONE
+    Sphere res;
+    res.radius = sphere.radius*scalingVector.x;
+    return res;
+}
+
+Vec3f translate(Vec3f point, Vec3f translationVector){//DONE
+    Vec3f res;
+    res.x = point.x + translationVector.x;
+    res.y = point.y + translationVector.y;
+    res.z = point.z + translationVector.z;
+    return res;
 }
 
 #endif
