@@ -108,7 +108,23 @@ Vec3f addLight(const RayIntersect &rayIntersect,const Scene &scene,const Ray &ra
         if(golgedemi(rayIntersect.intersectPoint, scene, currentLight)){ //Golgede kalmis do nothing
             //return pixelAsFloat;
         }else{  //isik vuruyor, o isiktan gelen isik degerlerini ekle
-            pixelAsFloat = Vec3fSum(pixelAsFloat, Diffuse(currentLight, scene.materials, materialId, rayIntersect));
+            Vec3f TextureColor;
+            Vec3f dif = Diffuse(currentLight, scene.materials, materialId, rayIntersect);
+            if(deccal=="replace_kd"){
+                dif.x = dif.x / scene.materials[materialId].diffuse.x * (TextureColor.x/255);
+                dif.y = dif.y / scene.materials[materialId].diffuse.y * (TextureColor.y/255);
+                dif.z = dif.z / scene.materials[materialId].diffuse.z * (TextureColor.z/255);}
+            else if(deccal=="blend_kd"){
+                dif.x = dif.x / scene.materials[materialId].diffuse.x * ((TextureColor.x/255)+(scene.materials[materialId].diffuse.x))/2;
+                dif.y = dif.y / scene.materials[materialId].diffuse.y * ((TextureColor.y/255)+(scene.materials[materialId].diffuse.y))/2;
+                dif.z = dif.z / scene.materials[materialId].diffuse.z * ((TextureColor.z/255)+(scene.materials[materialId].diffuse.z))/2;}
+            else if(deccal=="replace_all"){
+                pixelAsFloat = Vec3fSum(pixelAsFloat, TextureColor);
+            }
+            else{
+                pixelAsFloat = Vec3fSum(pixelAsFloat, TextureColor);
+            }
+            pixelAsFloat = Vec3fSum(pixelAsFloat, dif);
             pixelAsFloat = Vec3fSum(pixelAsFloat, Specular(currentLight, rayIntersect,ray, scene,materialId));
         }
     }

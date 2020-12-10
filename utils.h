@@ -6,6 +6,8 @@
 #include <math.h>
 #include "matrix.h"
 
+#define PI 3.14159265
+
 using namespace std;
 using namespace parser;
 
@@ -104,24 +106,59 @@ Vec4f matrix4x4_Vec4f_Multiply(matrix4x4 mat, Vec4f v){ //done with best perform
 }
 
 
-Vec3f rotate(Vec3f ilkhal, float aci, Vec3f vector){//TODO
+Vec3f rotate(const Vec3f &ilkhal,const float &aci,const Vec3f &vector){//TODO
+    // Rx(-a)*Ry(b)*Rz(t)*Ry(-b)*Rx(a)
+    Vec4f res;
+    Vec3f u = normalize(vector);
+    Vec3f up; up.x=0; up.y=u.y; up.z=u.z;
+    float upl = getLength(up);
 
+    matrix4x4 Rx;
+    Rx.mat[0][0]=1.;    Rx.mat[0][1]=0.;        Rx.mat[0][2]=0.;        Rx.mat[0][3]=0.;
+    Rx.mat[1][0]=0.;    Rx.mat[1][1]=u.z/upl;   Rx.mat[1][2]=-u.y/upl;  Rx.mat[1][3]=0.;
+    Rx.mat[2][0]=0.;    Rx.mat[2][1]=u.y/upl;   Rx.mat[2][2]=-u.z/upl;  Rx.mat[2][3]=0.;
+    Rx.mat[3][0]=0.;    Rx.mat[3][1]=0.;        Rx.mat[3][2]=0.;        Rx.mat[3][3]=1.;
+    matrix4x4 Ry;
+    Rx.mat[0][0]=upl;    Rx.mat[0][1]=0.;   Rx.mat[0][2]=u.x;    Rx.mat[0][3]=0.;
+    Rx.mat[1][0]=0.;     Rx.mat[1][1]=1.;   Rx.mat[1][2]=0.;      Rx.mat[1][3]=0.;
+    Rx.mat[2][0]=-u.x;   Rx.mat[2][1]=0.;   Rx.mat[2][2]=upl;     Rx.mat[2][3]=0.;
+    Rx.mat[3][0]=0.;     Rx.mat[3][1]=0.;   Rx.mat[3][2]=0.;      Rx.mat[3][3]=1.;
+    matrix4x4 Rz;
+    Rx.mat[0][0]=cos(aci*PI/180.0);    Rx.mat[0][1]=-sin(aci*PI/180.0);     Rx.mat[0][2]=0.;    Rx.mat[0][3]=0.;
+    Rx.mat[1][0]=sin(aci*PI/180.0);    Rx.mat[1][1]=cos(aci*PI/180.0);      Rx.mat[1][2]=0.;    Rx.mat[1][3]=0.;
+    Rx.mat[2][0]=0.;                   Rx.mat[2][1]=0.;                     Rx.mat[2][2]=1.;    Rx.mat[2][3]=0.;
+    Rx.mat[3][0]=0.;                   Rx.mat[3][1]=0.;                     Rx.mat[3][2]=0.;    Rx.mat[3][3]=1.;
+
+    Vec4f ilk;
+    ilk.x=ilkhal.x; ilk.y=ilkhal.y; ilk.z=ilkhal.z; ilk.w=1;
+
+    res = matrix4x4_Vec4f_Multiply(Rz,matrix4x4_Vec4f_Multiply(Ry,matrix4x4_Vec4f_Multiply(Rx,ilk)));
+    Ry.mat[0][2]=-u.x; Ry.mat[2][0]=u.x;
+    Rx.mat[1][2]=u.y/upl; Rx.mat[2][1]=-u.y/upl;
+    res = matrix4x4_Vec4f_Multiply(Rx,matrix4x4_Vec4f_Multiply(Ry,res));
+    return {
+        .x=res.x,
+        .y=res.y,
+        .z=res.z,
+    };
+ 
 }
 
-Vec3f scale(Vec3f  point, Vec3f scalingVector){///DONE
+Vec3f scale(const Vec3f &point,const Vec3f &scalingVector){///DONE
     Vec3f res;
     res.x = point.x * scalingVector.x;
     res.y = point.y * scalingVector.y;
     res.z = point.z * scalingVector.z;
+    return res;
 
 }
-Sphere scale(Sphere sphere, Vec3f scalingVector){//DONE
+Sphere scale(const Sphere &sphere,const Vec3f &scalingVector){//DONE
     Sphere res;
     res.radius = sphere.radius*scalingVector.x;
     return res;
 }
 
-Vec3f translate(Vec3f point, Vec3f translationVector){//DONE
+Vec3f translate(const Vec3f &point,const Vec3f &translationVector){//DONE
     Vec3f res;
     res.x = point.x + translationVector.x;
     res.y = point.y + translationVector.y;
