@@ -24,15 +24,7 @@ Vec3f cross(const Vec3f &v1,const Vec3f &v2)
     return result;
 }
 
-Vec3f normalize(const Vec3f &v)
-{
-    Vec3f result;
-    float uzunluk =  sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
-    result.x = v.x / uzunluk;
-    result.y = v.y / uzunluk;
-    result.z = v.z / uzunluk;
-    return result;
-}
+
 
 /*
  * Generates A Ray

@@ -54,6 +54,9 @@ Scene idleriDuzelt(Scene scene){//TODO transformaiton idleri
             scene.meshes[i].faces[j].v1_id--;
             scene.meshes[i].faces[j].v2_id--;
         }
+        for(int j=0;j<scene.meshes[i].transformasyonlar.size();j++){
+            scene.meshes[i].transformasyonlar[j].id--;    
+        }
     }
     for(int i=0;i< scene.triangles.size();i++){
         scene.triangles[i].material_id--;
@@ -62,15 +65,22 @@ Scene idleriDuzelt(Scene scene){//TODO transformaiton idleri
         scene.triangles[i].indices.v2_id--;
         scene.triangles[i].texture_id--;
         scene.triangles[i].transformasyonlar = getTransformationVectorFromString(scene.triangles[i].transformations);
-        //cout << scene.triangles[i].transformations<<endl;
+        for(int j=0;j<scene.triangles[i].transformasyonlar.size();j++){
+            scene.triangles[i].transformasyonlar[j].id--;    
+        }
     }
     for(int i=0;i<scene.spheres.size();i++){
         scene.spheres[i].center_vertex_id--;
         scene.spheres[i].material_id--;
         scene.spheres[i].texture_id--;
         scene.triangles[i].transformasyonlar = getTransformationVectorFromString(scene.spheres[i].transformations);
+        for(int j=0;j<scene.spheres[i].transformasyonlar.size();j++){
+            scene.spheres[i].transformasyonlar[j].id--;    
+        }
+        
         //cout << scene.spheres[i].transformations<<endl;
     }
+    
 
     // for(int i=0;i<scene.cameras;i++)
     //     scene.cameras[i].;
@@ -103,7 +113,10 @@ RaySabitleri rayiHazirla(const Camera &cam){
 }
 
 Scene applyTransformations(Scene scene){//TODO
-    for(auto sphere: scene.spheres){
+    p(scene.meshes);
+    p(scene.triangles);
+    p(scene.spheres);
+    for(auto &sphere: scene.spheres){
         for(auto transformasyon: sphere.transformasyonlar){
             if(transformasyon.type=='r'){
                 Vec3f newCenter = rotate(scene.vertex_data[sphere.center_vertex_id],scene.rotations[transformasyon.id].angle,{scene.rotations[transformasyon.id].x,scene.rotations[transformasyon.id].y,scene.rotations[transformasyon.id].z});
@@ -122,69 +135,65 @@ Scene applyTransformations(Scene scene){//TODO
             }
         }    
     }
-    for(auto triangle: scene.triangles){
+    for(auto &triangle: scene.triangles){
         for(auto transformasyon: triangle.transformasyonlar){
             if(transformasyon.type=='r'){
-                Vec3f newV0 = rotate(scene.vertex_data[triangle.indices.v0_id],scene.rotations[transformasyon.id].angle,{scene.rotations[transformasyon.id].x,scene.rotations[transformasyon.id].y,scene.rotations[transformasyon.id].z});
-                //Vec3f newCenter = rotate(scene.vertex_data[sphere.center_vertex_id],scene.rotations[transformasyon.id].angle,{scene.rotations[transformasyon.id].x,scene.rotations[transformasyon.id].y,scene.rotations[transformasyon.id].z});
-                scene.vertex_data.push_back(newV0);
-                triangle.indices.v0_id = scene.vertex_data.size() - 1;
-                Vec3f newV1 = rotate(scene.vertex_data[triangle.indices.v1_id],scene.rotations[transformasyon.id].angle,{scene.rotations[transformasyon.id].x,scene.rotations[transformasyon.id].y,scene.rotations[transformasyon.id].z});
-                scene.vertex_data.push_back(newV1);
-                triangle.indices.v1_id = scene.vertex_data.size() - 1;
+                // Vec3f newV0 = rotate(scene.vertex_data[triangle.indices.v0_id],scene.rotations[transformasyon.id].angle,{scene.rotations[transformasyon.id].x,scene.rotations[transformasyon.id].y,scene.rotations[transformasyon.id].z});
+                // scene.vertex_data.push_back(newV0);
+                // triangle.indices.v0_id = scene.vertex_data.size() - 1;
+                // Vec3f newV1 = rotate(scene.vertex_data[triangle.indices.v1_id],scene.rotations[transformasyon.id].angle,{scene.rotations[transformasyon.id].x,scene.rotations[transformasyon.id].y,scene.rotations[transformasyon.id].z});
+                // scene.vertex_data.push_back(newV1);
+                // triangle.indices.v1_id = scene.vertex_data.size() - 1;
                 
-                Vec3f newV2 = rotate(scene.vertex_data[triangle.indices.v2_id],scene.rotations[transformasyon.id].angle,{scene.rotations[transformasyon.id].x,scene.rotations[transformasyon.id].y,scene.rotations[transformasyon.id].z});
-                scene.vertex_data.push_back(newV2);
-                triangle.indices.v2_id = scene.vertex_data.size() - 1;
+                // Vec3f newV2 = rotate(scene.vertex_data[triangle.indices.v2_id],scene.rotations[transformasyon.id].angle,{scene.rotations[transformasyon.id].x,scene.rotations[transformasyon.id].y,scene.rotations[transformasyon.id].z});
+                // scene.vertex_data.push_back(newV2);
+                // triangle.indices.v2_id = scene.vertex_data.size() - 1;
                 
                 
             }else if(transformasyon.type == 't'){
-                Vec3f newV0 = translate(scene.vertex_data[triangle.indices.v0_id],scene.translations[transformasyon.id]);
-                scene.vertex_data.push_back(newV0);
-                triangle.indices.v0_id = scene.vertex_data.size() - 1;
-                //Vec3f newCenter = translate(scene.vertex_data[sphere.center_vertex_id],scene.translations[transformasyon.id]);
-                //scene.vertex_data.push_back(newCenter);
-                //sphere.center_vertex_id = scene.vertex_data.size() - 1;
-                Vec3f newV1 = translate(scene.vertex_data[triangle.indices.v1_id],scene.translations[transformasyon.id]);
-                scene.vertex_data.push_back(newV1);
-                triangle.indices.v1_id = scene.vertex_data.size() - 1;
+            //     Vec3f newV0 = translate(scene.vertex_data[triangle.indices.v0_id],scene.translations[transformasyon.id]);
+            //     scene.vertex_data.push_back(newV0);
+            //     triangle.indices.v0_id = scene.vertex_data.size() - 1;
+            //     Vec3f newV1 = translate(scene.vertex_data[triangle.indices.v1_id],scene.translations[transformasyon.id]);
+            //     scene.vertex_data.push_back(newV1);
+            //     triangle.indices.v1_id = scene.vertex_data.size() - 1;
 
-                Vec3f newV2 = translate(scene.vertex_data[triangle.indices.v2_id],scene.translations[transformasyon.id]);
-                scene.vertex_data.push_back(newV2);
-                triangle.indices.v2_id = scene.vertex_data.size() - 1;
+            //     Vec3f newV2 = translate(scene.vertex_data[triangle.indices.v2_id],scene.translations[transformasyon.id]);
+            //     scene.vertex_data.push_back(newV2);
+            //     triangle.indices.v2_id = scene.vertex_data.size() - 1;
 
             }else if(transformasyon.type == 's'){
-                Vec3f newV0 = scale(scene.vertex_data[triangle.indices.v0_id],scene.scalings[transformasyon.id]);
-                scene.vertex_data.push_back(newV0);
-                triangle.indices.v0_id = scene.vertex_data.size() - 1;
+            //     Vec3f newV0 = scale(scene.vertex_data[triangle.indices.v0_id],scene.scalings[transformasyon.id]);
+            //     scene.vertex_data.push_back(newV0);
+            //     triangle.indices.v0_id = scene.vertex_data.size() - 1;
 
-                Vec3f newV1 = scale(scene.vertex_data[triangle.indices.v1_id],scene.scalings[transformasyon.id]);
-                scene.vertex_data.push_back(newV1);
-                triangle.indices.v1_id = scene.vertex_data.size() - 1;
+            //     Vec3f newV1 = scale(scene.vertex_data[triangle.indices.v1_id],scene.scalings[transformasyon.id]);
+            //     scene.vertex_data.push_back(newV1);
+            //     triangle.indices.v1_id = scene.vertex_data.size() - 1;
 
-                Vec3f newV2 = scale(scene.vertex_data[triangle.indices.v2_id],scene.scalings[transformasyon.id]);
-                scene.vertex_data.push_back(newV2);
-                triangle.indices.v2_id = scene.vertex_data.size() - 1;
+            //     Vec3f newV2 = scale(scene.vertex_data[triangle.indices.v2_id],scene.scalings[transformasyon.id]);
+            //     scene.vertex_data.push_back(newV2);
+            //     triangle.indices.v2_id = scene.vertex_data.size() - 1;
             }else{
                 cout<<"ERROR! UNKNOWN TRANSFORMATION" + transformasyon.type<<endl;
             }
         }    
     }
-    for(auto mesh: scene.meshes){
-        for(auto face: mesh.faces){
+    for(auto &mesh: scene.meshes){
+        for(auto &face: mesh.faces){
             for(auto transformasyon: mesh.transformasyonlar){
                 if(transformasyon.type=='r'){
-                    Vec3f newV0 = scale(scene.vertex_data[face.v0_id],scene.scalings[transformasyon.id]);
-                    scene.vertex_data.push_back(newV0);
-                    face.v0_id = scene.vertex_data.size() - 1;
+                    // Vec3f newV0 = rotate(scene.vertex_data[face.v0_id],scene.rotations[transformasyon.id].angle,{scene.rotations[transformasyon.id].x,scene.rotations[transformasyon.id].y,scene.rotations[transformasyon.id].z});
+                    // scene.vertex_data.push_back(newV0);
+                    // face.v0_id = scene.vertex_data.size() - 1;
 
-                    Vec3f newV1 = scale(scene.vertex_data[face.v1_id],scene.scalings[transformasyon.id]);
-                    scene.vertex_data.push_back(newV1);
-                    face.v1_id = scene.vertex_data.size() - 1;
+                    // Vec3f newV1 = rotate(scene.vertex_data[face.v1_id],scene.rotations[transformasyon.id].angle, {scene.rotations[transformasyon.id].x,scene.rotations[transformasyon.id].y,scene.rotations[transformasyon.id].z});
+                    // scene.vertex_data.push_back(newV1);
+                    // face.v1_id = scene.vertex_data.size() - 1;
 
-                    Vec3f newV2 = scale(scene.vertex_data[face.v2_id],scene.scalings[transformasyon.id]);
-                    scene.vertex_data.push_back(newV2);
-                    face.v2_id = scene.vertex_data.size() - 1;
+                    // Vec3f newV2 = rotate(scene.vertex_data[face.v2_id],scene.rotations[transformasyon.id].angle, {scene.rotations[transformasyon.id].x,scene.rotations[transformasyon.id].y,scene.rotations[transformasyon.id].z});
+                    // scene.vertex_data.push_back(newV2);
+                    // face.v2_id = scene.vertex_data.size() - 1;
                 }else if(transformasyon.type == 't'){
                      Vec3f newV0 = translate(scene.vertex_data[face.v0_id],scene.translations[transformasyon.id]);
                     scene.vertex_data.push_back(newV0);
@@ -201,17 +210,17 @@ Scene applyTransformations(Scene scene){//TODO
 
                 }else if(transformasyon.type == 's'){
 
-                    Vec3f newV0 = scale(scene.vertex_data[face.v0_id],scene.scalings[transformasyon.id]);
-                    scene.vertex_data.push_back(newV0);
-                    face.v0_id = scene.vertex_data.size() - 1;
+                    // Vec3f newV0 = scale(scene.vertex_data[face.v0_id],scene.scalings[transformasyon.id]);
+                    // scene.vertex_data.push_back(newV0);
+                    // face.v0_id = scene.vertex_data.size() - 1;
 
-                    Vec3f newV1 = scale(scene.vertex_data[face.v1_id],scene.scalings[transformasyon.id]);
-                    scene.vertex_data.push_back(newV1);
-                    face.v1_id = scene.vertex_data.size() - 1;
+                    // Vec3f newV1 = scale(scene.vertex_data[face.v1_id],scene.scalings[transformasyon.id]);
+                    // scene.vertex_data.push_back(newV1);
+                    // face.v1_id = scene.vertex_data.size() - 1;
 
-                    Vec3f newV2 = scale(scene.vertex_data[face.v2_id],scene.scalings[transformasyon.id]);
-                    scene.vertex_data.push_back(newV2);
-                    face.v2_id = scene.vertex_data.size() - 1;
+                    // Vec3f newV2 = scale(scene.vertex_data[face.v2_id],scene.scalings[transformasyon.id]);
+                    // scene.vertex_data.push_back(newV2);
+                    // face.v2_id = scene.vertex_data.size() - 1;
 
                 }else{
                     cout<<"ERROR! UNKNOWN TRANSFORMATION " + transformasyon.type<<endl;
@@ -219,6 +228,12 @@ Scene applyTransformations(Scene scene){//TODO
             }    
         }
     }
+
+    p("--------------------------------");
+    p(scene.meshes);
+    p(scene.triangles);
+    p(scene.spheres);
+    return scene;
 
 }
 
@@ -252,8 +267,10 @@ void threadable(int i, int to,const Scene &scene,const RaySabitleri &raySabitler
  * 
  */
 void generateImages(const Scene &scene){
+    cout << "Generating Images\n";
+    cout << "Cam numbers: " +to_string(scene.cameras.size())<<"\n";
     for(int cam = 0; cam < scene.cameras.size(); cam++){
-
+        cout<<"cam "+to_string(cam)<<"\n";
         RaySabitleri raySabitleri = rayiHazirla(scene.cameras[cam]);
         unsigned char * image = new unsigned char[(scene.cameras[cam].image_height*scene.cameras[cam].image_width)* 3];
         int width = scene.cameras[cam].image_width;
@@ -267,7 +284,7 @@ void generateImages(const Scene &scene){
         //threadable(0,height/4,scene,raySabitleri,image,width,height,cam);
         //TODO less than 4 i ise tek thread
         const auto processor_count = std::thread::hardware_concurrency();
-        cout << processor_count<<"\n";
+        cout << processor_count<<" is the processor count\n";
         std::thread t1 = std::thread(threadable,0         ,height/4    ,scene,raySabitleri,image,width,height,cam);
         std::thread t2 = std::thread(threadable,height/4  ,height/2    ,scene,raySabitleri,image,width,height,cam);
         std::thread t3 = std::thread(threadable,height/2  ,3*height/4  ,scene,raySabitleri,image,width,height,cam);
@@ -354,61 +371,13 @@ int main(int argc, char* argv[])
     parser::Scene scene;
     p("Basladi");
     scene.loadFromXml(argv[1]);
-    // p("background color: ");
-    // p(scene.background_color);
-    // p("\n");
-    // p("shadow ray epsilon: ");
-    // p(scene.shadow_ray_epsilon);
-    // p("\nmax_recursion_depth: ");
-    // p(scene.max_recursion_depth);
-    // p("\ncameras: ");
-    // p(scene.cameras);
-    // p("\nambient_light: ");
-    // p(scene.ambient_light);
-    // p("\npoint_lights: ");
-    // p(scene.point_lights);
-    // p("\nmaterials: ");
-    // p(scene.materials);
-    // p("\nvertex_data: ");
-    // p(scene.vertex_data);
-    // p("\nHere are the objects:");
-    // p("\n meshes: ");
-    // p(scene.meshes);
-    // p("\ntriangles: ");
-    // p(scene.triangles);
-    // p("\nspheres: ");
-    // p(scene.spheres);
-    // p("\n");
-    // auto a = scene.meshes[0].faces[0];
-    // auto b = scene.meshes[0].faces[1];
-    // scene.meshes[0].faces.pop_back();
-    // scene.meshes[0].faces.pop_back();
-    //scene.meshes[0].faces.push_back(b);
+    p(scene.cameras.size());
+    p("No of cameras");
     scene = idleriDuzelt(scene);
     scene = applyTransformations(scene);
     generateImages(scene);
 
-    // // The code below creates a test pattern and writes
-    // // it to a PPM file to demonstrate the usage of the
-    // // ppm_write function.
-    // //
-    // // Normally, you would be running your ray tracing
-    // // code here to produce the desired image.
 
-    // const RGB BAR_COLOR[8] =
-    // {
-    //     { 255, 255, 255 },  // 100% White
-    //     { 255, 255,   0 },  // Yellow
-    //     {   0, 255, 255 },  // Cyan
-    //     {   0, 255,   0 },  // Green
-    //     { 255,   0, 255 },  // Magenta
-    //     { 255,   0,   0 },  // Red
-    //     {   0,   0, 255 },  // Blue
-    //     {   0,   0,   0 },  // Black
-    // };
-
-    // int width = 640, height = 480;
-    // int columnWidth = width / 8;
 
     // unsigned char* image = new unsigned char [width * height * 3];
 

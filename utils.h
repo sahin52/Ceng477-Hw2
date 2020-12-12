@@ -19,6 +19,16 @@ parser::Vec3f Vec3fminus(const parser::Vec3f &v1,const  parser::Vec3f &v2){
     return res;
 }
 
+Vec3f normalize(const Vec3f &v)
+{
+    Vec3f result;
+    float uzunluk =  sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
+    result.x = v.x / uzunluk;
+    result.y = v.y / uzunluk;
+    result.z = v.z / uzunluk;
+    return result;
+}
+
 Vec3f Vec3fDivision(const Vec3f &vec, const float &sayi){
     Vec3f res;
     res.x = vec.x/sayi;

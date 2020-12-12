@@ -1,7 +1,6 @@
 #ifndef __GETCOLOR__
 #define __GETCOLOR__
 #include "checkShapes.h"
-#include <string>
 //#include "generateRays.cpp"
 using namespace std;
 using namespace parser;
@@ -85,22 +84,17 @@ bool golgedemi(const Vec3f &pointToCheck,const Scene &scene,const PointLight &cu
 
     return false;
 };
-
-Vec3f addLight(const RayIntersect &rayIntersect,const Scene &scene,const Ray &ray, Vec3f pixelAsFloat){
+Vec3f addLightFromLightSources(const RayIntersect &rayIntersect,const Scene &scene,const Ray &ray, Vec3f pixelAsFloat){
     int numberOfLights = scene.point_lights.size();
     int materialId=1;
-    string deccal;
     if(rayIntersect.shape.form == SPHERE){
         materialId = scene.spheres[rayIntersect.shape.id].material_id;
-        deccal = scene.textures[scene.spheres[rayIntersect.shape.id].texture_id].decalMode;//Added newly
     }
     if(rayIntersect.shape.form == TRIANGLE){
         materialId = scene.triangles[rayIntersect.shape.id].material_id;
-        deccal = scene.textures[scene.triangles[rayIntersect.shape.id].texture_id].decalMode;//Added newly
     }
     if(rayIntersect.shape.form == MESH){
         materialId = scene.meshes[rayIntersect.shape.id].material_id;
-        deccal = scene.textures[scene.meshes[rayIntersect.shape.id].texture_id].decalMode;//Added newly
     }
 
     for(int i=0;i<numberOfLights;i++){
@@ -108,23 +102,7 @@ Vec3f addLight(const RayIntersect &rayIntersect,const Scene &scene,const Ray &ra
         if(golgedemi(rayIntersect.intersectPoint, scene, currentLight)){ //Golgede kalmis do nothing
             //return pixelAsFloat;
         }else{  //isik vuruyor, o isiktan gelen isik degerlerini ekle
-            Vec3f TextureColor;
-            Vec3f dif = Diffuse(currentLight, scene.materials, materialId, rayIntersect);
-            if(deccal=="replace_kd"){
-                dif.x = dif.x / scene.materials[materialId].diffuse.x * (TextureColor.x/255);
-                dif.y = dif.y / scene.materials[materialId].diffuse.y * (TextureColor.y/255);
-                dif.z = dif.z / scene.materials[materialId].diffuse.z * (TextureColor.z/255);}
-            else if(deccal=="blend_kd"){
-                dif.x = dif.x / scene.materials[materialId].diffuse.x * ((TextureColor.x/255)+(scene.materials[materialId].diffuse.x))/2;
-                dif.y = dif.y / scene.materials[materialId].diffuse.y * ((TextureColor.y/255)+(scene.materials[materialId].diffuse.y))/2;
-                dif.z = dif.z / scene.materials[materialId].diffuse.z * ((TextureColor.z/255)+(scene.materials[materialId].diffuse.z))/2;}
-            else if(deccal=="replace_all"){
-                pixelAsFloat = Vec3fSum(pixelAsFloat, TextureColor);
-            }
-            else{
-                pixelAsFloat = Vec3fSum(pixelAsFloat, TextureColor);
-            }
-            pixelAsFloat = Vec3fSum(pixelAsFloat, dif);
+            pixelAsFloat = Vec3fSum(pixelAsFloat, Diffuse(currentLight, scene.materials, materialId, rayIntersect));
             pixelAsFloat = Vec3fSum(pixelAsFloat, Specular(currentLight, rayIntersect,ray, scene,materialId));
         }
     }
@@ -220,11 +198,7 @@ Vec3f getColorOfTheIntersection(const RayIntersect &rayIntersect,const Scene &sc
     pixelAsFloat.y = scene.ambient_light.y* scene.materials[materialId].ambient.y;
     pixelAsFloat.z = scene.ambient_light.z* scene.materials[materialId].ambient.z;
     if(rayIntersect.isThereIntersect) 
-    //TODO give color according to decal_mode 
-    //if the color is the color of the texture, dont care light sources
-    //if the color is replace_kd
-    //if the color is  
-    pixelAsFloat = addLight(rayIntersect, scene, ray, pixelAsFloat);
+    pixelAsFloat = addLightFromLightSources(rayIntersect, scene, ray, pixelAsFloat);
     //pixelAsFloat = addMirroring(pixelAsFloat);
     //Get the light from the light sources,
     pixelAsFloat = addTheYansimas(rayIntersect, scene, ray, pixelAsFloat,max_recursion_depth);
