@@ -118,6 +118,9 @@ Vec4f matrix4x4_Vec4f_Multiply(matrix4x4 mat, Vec4f v){ //done with best perform
 
 Vec3f rotate(const Vec3f &ilkhal,const float &aci,const Vec3f &vector){//TODO
     // Rx(-a)*Ry(b)*Rz(t)*Ry(-b)*Rx(a)
+    if(ilkhal.x == 0. && ilkhal.y == 0. && ilkhal.z == 0.){
+        return {0,0,0};
+    }
     Vec4f res;
     Vec3f u = normalize(vector);
     Vec3f up; up.x=0; up.y=u.y; up.z=u.z;

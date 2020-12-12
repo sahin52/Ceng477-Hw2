@@ -49,27 +49,35 @@ std::vector<Transformation> getTransformationVectorFromString(std::string transf
 Scene applyTransformations(Scene scene){//TODO
     p(scene.meshes);
     p(scene.triangles);
+    //p("____________________________ sphere bas");
     p(scene.spheres);
+    p("____________________________Vertices bas:");
+    p(scene.vertex_data);
     for(auto &sphere: scene.spheres){
         auto transformasyonlar = getTransformationVectorFromString(sphere.transformations);
         sphere.transformasyonlar = transformasyonlar;
+        p(transformasyonlar);
         // for(auto transformasyon: transformasyonlar){
-        //     if(transformasyon.type=='r'){
-        //         Vec3f newCenter = rotate(scene.vertex_data[sphere.center_vertex_id],scene.rotations[transformasyon.id].angle,{scene.rotations[transformasyon.id].x,scene.rotations[transformasyon.id].y,scene.rotations[transformasyon.id].z});
-        //         scene.vertex_data.push_back(newCenter);
-        //         sphere.center_vertex_id = scene.vertex_data.size() - 1;
+            if(transformasyon.type=='r'){
+                p("oldCenter");
+                p(scene.vertex_data[sphere.center_vertex_id]);
+                Vec3f newCenter = rotate(scene.vertex_data[sphere.center_vertex_id],scene.rotations[transformasyon.id].angle,{scene.rotations[transformasyon.id].x,scene.rotations[transformasyon.id].y,scene.rotations[transformasyon.id].z});
+                scene.vertex_data.push_back(newCenter);
+                sphere.center_vertex_id = scene.vertex_data.size() - 1;
+                p("NewCenter:");
+                p(newCenter);
                 
-        //     }else if(transformasyon.type == 't'){
-        //         Vec3f newCenter = translate(scene.vertex_data[sphere.center_vertex_id],scene.translations[transformasyon.id]);
-        //         scene.vertex_data.push_back(newCenter);
-        //         sphere.center_vertex_id = scene.vertex_data.size() - 1;
-        //     }else if(transformasyon.type == 's'){
-        //         auto newSphere = scale(sphere,scene.scalings[transformasyon.id]);
-        //         sphere.radius = newSphere.radius;
-        //     }else{
-        //         cout<<"ERROR! UNKNOWN TRANSFORMATION" + transformasyon.type<<endl;
-        //     }
-        // }    
+            }else if(transformasyon.type == 't'){
+                Vec3f newCenter = translate(scene.vertex_data[sphere.center_vertex_id],scene.translations[transformasyon.id]);
+                scene.vertex_data.push_back(newCenter);
+                sphere.center_vertex_id = scene.vertex_data.size() - 1;
+            }else if(transformasyon.type == 's'){
+                auto newSphere = scale(sphere,scene.scalings[transformasyon.id]);
+                sphere.radius = newSphere.radius;
+            }else{
+                cout<<"ERROR! UNKNOWN TRANSFORMATION" + transformasyon.type<<endl;
+            }
+        }
     }
     for(auto &triangle: scene.triangles){
         auto transformasyonlar = getTransformationVectorFromString(triangle.transformations);
@@ -187,7 +195,10 @@ Scene applyTransformations(Scene scene){//TODO
     // p("--------------------------------");
     // p(scene.meshes);
     // p(scene.triangles);
+    // p("____________________________sphere end:");
     // p(scene.spheres);
+    // p("____________________________vertex:");
+    // p(scene.vertex_data);
     return scene;
 
 }
