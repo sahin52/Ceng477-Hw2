@@ -23,6 +23,17 @@ void p(const parser::Vec3f &v){ //Prints vector
 void p(const Vec4f &v){
     cout << v.w << " " << v.x << " "<<   v.y << " " <<v.z<<"\n";
 }
+void p(Transformation t){
+    cout << "Transformation: " << t.type   << " "<< t.id << "\n";
+}
+void p(std::vector<Transformation> ts){
+    for( auto t: ts){
+        p(t);
+    }
+}
+void p(){
+    cout <<"\n";
+}
 void p(const vector<PointLight> &point_lights){
     for(auto i: point_lights){
         p("intensity: ");
