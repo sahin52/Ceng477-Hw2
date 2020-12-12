@@ -1,3 +1,3 @@
 all:
-	g++ *.cpp -o test -std=c++11
+	g++ *.cpp ../matrix.cpp -o test -std=c++11
 
