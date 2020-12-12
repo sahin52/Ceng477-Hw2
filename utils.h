@@ -126,24 +126,24 @@ Vec3f rotate(const Vec3f &ilkhal,const float &aci,const Vec3f &vector){//TODO
     matrix4x4 Rx;
     Rx.mat[0][0]=1.;    Rx.mat[0][1]=0.;        Rx.mat[0][2]=0.;        Rx.mat[0][3]=0.;
     Rx.mat[1][0]=0.;    Rx.mat[1][1]=u.z/upl;   Rx.mat[1][2]=-u.y/upl;  Rx.mat[1][3]=0.;
-    Rx.mat[2][0]=0.;    Rx.mat[2][1]=u.y/upl;   Rx.mat[2][2]=-u.z/upl;  Rx.mat[2][3]=0.;
+    Rx.mat[2][0]=0.;    Rx.mat[2][1]=u.y/upl;   Rx.mat[2][2]=u.z/upl;   Rx.mat[2][3]=0.;
     Rx.mat[3][0]=0.;    Rx.mat[3][1]=0.;        Rx.mat[3][2]=0.;        Rx.mat[3][3]=1.;
     matrix4x4 Ry;
-    Rx.mat[0][0]=upl;    Rx.mat[0][1]=0.;   Rx.mat[0][2]=u.x;    Rx.mat[0][3]=0.;
-    Rx.mat[1][0]=0.;     Rx.mat[1][1]=1.;   Rx.mat[1][2]=0.;      Rx.mat[1][3]=0.;
-    Rx.mat[2][0]=-u.x;   Rx.mat[2][1]=0.;   Rx.mat[2][2]=upl;     Rx.mat[2][3]=0.;
-    Rx.mat[3][0]=0.;     Rx.mat[3][1]=0.;   Rx.mat[3][2]=0.;      Rx.mat[3][3]=1.;
+    Ry.mat[0][0]=upl;    Ry.mat[0][1]=0.;   Ry.mat[0][2]=-u.x;    Ry.mat[0][3]=0.;
+    Ry.mat[1][0]=0.;     Ry.mat[1][1]=1.;   Ry.mat[1][2]=0.;      Ry.mat[1][3]=0.;
+    Ry.mat[2][0]=u.x;   Ry.mat[2][1]=0.;   Ry.mat[2][2]=upl;     Ry.mat[2][3]=0.;
+    Ry.mat[3][0]=0.;     Ry.mat[3][1]=0.;   Ry.mat[3][2]=0.;      Ry.mat[3][3]=1.;
     matrix4x4 Rz;
-    Rx.mat[0][0]=cos(aci*PI/180.0);    Rx.mat[0][1]=-sin(aci*PI/180.0);     Rx.mat[0][2]=0.;    Rx.mat[0][3]=0.;
-    Rx.mat[1][0]=sin(aci*PI/180.0);    Rx.mat[1][1]=cos(aci*PI/180.0);      Rx.mat[1][2]=0.;    Rx.mat[1][3]=0.;
-    Rx.mat[2][0]=0.;                   Rx.mat[2][1]=0.;                     Rx.mat[2][2]=1.;    Rx.mat[2][3]=0.;
-    Rx.mat[3][0]=0.;                   Rx.mat[3][1]=0.;                     Rx.mat[3][2]=0.;    Rx.mat[3][3]=1.;
+    Rz.mat[0][0]=cos(aci*PI/180.0);    Rz.mat[0][1]=-sin(aci*PI/180.0);     Rz.mat[0][2]=0.;    Rz.mat[0][3]=0.;
+    Rz.mat[1][0]=sin(aci*PI/180.0);    Rz.mat[1][1]=cos(aci*PI/180.0);      Rz.mat[1][2]=0.;    Rz.mat[1][3]=0.;
+    Rz.mat[2][0]=0.;                   Rz.mat[2][1]=0.;                     Rz.mat[2][2]=1.;    Rz.mat[2][3]=0.;
+    Rz.mat[3][0]=0.;                   Rz.mat[3][1]=0.;                     Rz.mat[3][2]=0.;    Rz.mat[3][3]=1.;
 
     Vec4f ilk;
     ilk.x=ilkhal.x; ilk.y=ilkhal.y; ilk.z=ilkhal.z; ilk.w=1;
 
     res = matrix4x4_Vec4f_Multiply(Rz,matrix4x4_Vec4f_Multiply(Ry,matrix4x4_Vec4f_Multiply(Rx,ilk)));
-    Ry.mat[0][2]=-u.x; Ry.mat[2][0]=u.x;
+    Ry.mat[0][2]=u.x; Ry.mat[2][0]=-u.x;
     Rx.mat[1][2]=u.y/upl; Rx.mat[2][1]=-u.y/upl;
     res = matrix4x4_Vec4f_Multiply(Rx,matrix4x4_Vec4f_Multiply(Ry,res));
     return {
