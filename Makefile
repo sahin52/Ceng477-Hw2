@@ -24,3 +24,5 @@ horse:
 	./raytracer "hw2_sample_scenes/horse.xml"
 simple_transform:
 	make && ./raytracer "hw2_sample_scenes/simple_transform.xml"
+skybox:
+	make && ./raytracer "hw2_sample_scenes/skybox.xml"
