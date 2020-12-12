@@ -1,3 +1,5 @@
+#ifndef __MATRX__
+#define __MATRX__
 #include <iostream>
 using namespace std;
 
@@ -11,3 +13,4 @@ public:
     matrix4x4(matrix4x4 &matrix);
 
 };
+#endif
