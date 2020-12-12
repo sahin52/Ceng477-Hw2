@@ -5,6 +5,7 @@
 #include "ppm.h"
 #include <math.h>
 #include "matrix.h"
+#include "jpeg.h"
 
 #define PI 3.14159265
 
@@ -18,6 +19,62 @@ parser::Vec3f Vec3fminus(const parser::Vec3f &v1,const  parser::Vec3f &v2){
     res.z = v1.z-v2.z;
     return res;
 }
+
+struct Image{
+    std::string name;
+    unsigned char * image;
+    int width;
+    int height;
+};
+
+vector<Image> Images ;
+bool areImagesLoaded = false;
+
+vector<Image> loadImages(const Scene &scene){
+    vector<Image> res;
+
+    scene.meshes[0].texture_id;
+    vector<Texture> textures;
+    areImagesLoaded = true;
+    for(auto tex: scene.textures){
+        textures.push_back(tex);
+        int width, height;
+        char *filename = (char *) tex.imageName.c_str();
+       //const char* temp = (const char*) tex.imageName;
+        read_jpeg_header(filename,width,height);
+        unsigned char * image = new unsigned char[width*height*3];
+        read_jpeg(filename,image,width,height);
+        Image temp;
+        temp.name = tex.imageName;
+        temp.width = width;
+        temp.height = height;
+        temp.image = image;
+        Images.push_back(temp);
+        res.push_back(temp);
+    }
+
+
+    Images = res;
+    return res;
+}
+
+Vec3f fetch(const Scene &scene, std::string imageName, int row, int column){
+    if(!areImagesLoaded){
+        loadImages(scene);
+    }
+    for(auto image: Images){
+        if(image.name == imageName){
+            auto tempX = (int) image.image[3*(row*image.width+column)];
+            auto tempY = (int) image.image[3*(row*image.width+column)+1];
+            auto tempZ = (int) image.image[3*(row*image.width+column)+2];
+
+            
+            return {(float) tempX,(float) tempY,(float) tempZ};
+        }
+    }
+    cout << "ERROR! Couldn't find the image!\n";
+    return{0,0,0};
+};
 
 Vec3f normalize(const Vec3f &v)
 {

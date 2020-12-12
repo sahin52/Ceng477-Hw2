@@ -3,7 +3,7 @@ all:
 run:
 	./raytracer "Sample Scenes/Input Files/simple.xml"
 testfile:
-	cd Tests && make && ./test && cd ..
+	cd Tests && make && ./test "../MoreScenes/scenes/earth_and_moon.xml" && cd ..
 sshading:
 	./raytracer "Sample Scenes/Input Files/simple_shading.xml"
 bunny:

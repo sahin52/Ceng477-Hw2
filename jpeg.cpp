@@ -4,7 +4,7 @@
 #include <jpeglib.h>
 #include "jpeg.h"
 
-void read_jpeg_header(char *filename, int& width, int& height)
+void read_jpeg_header(const char *filename, int& width, int& height)
 {
 	struct jpeg_decompress_struct cinfo;
 	struct jpeg_error_mgr jerr;
@@ -32,7 +32,7 @@ void read_jpeg_header(char *filename, int& width, int& height)
 	height = cinfo.output_height;
 }
 
-void read_jpeg(char *filename, unsigned char *image, int width, int height)
+void read_jpeg(const char *filename, unsigned char *image, int width, int height)
 {
 	struct jpeg_decompress_struct cinfo;
 	struct jpeg_error_mgr jerr;
