@@ -35,7 +35,6 @@ vector<Image> loadImages(const Scene &scene){
 
     scene.meshes[0].texture_id;
     vector<Texture> textures;
-    areImagesLoaded = true;
     for(auto tex: scene.textures){
         textures.push_back(tex);
         int width, height;
@@ -52,9 +51,10 @@ vector<Image> loadImages(const Scene &scene){
         Images.push_back(temp);
         res.push_back(temp);
     }
-
-
-    Images = res;
+    if(!areImagesLoaded){
+        areImagesLoaded = true;
+        Images = res;
+    }
     return res;
 }
 
@@ -72,9 +72,40 @@ Vec3f fetch(const Scene &scene, std::string imageName, int column, int row){
             return {(float) tempX,(float) tempY,(float) tempZ};
         }
     }
-    cout << "ERROR! Couldn't find the image!\n";
+    cout << "ERROR! Couldn't find the image!"<< imageName << "\n";
+    for(auto image: Images){
+        cout<< image.name<< " is im name  ";
+    }
     return{0,0,0};
 };
+
+//Returns the width of an image
+int getWidth(const Scene &scene, string imageName){
+    if(!areImagesLoaded){
+        loadImages(scene);
+    }
+    for(auto image: Images){
+        if(image.name == imageName){
+            return image.width;
+        }
+    }
+    cout << "ERROR! couldn't find the image " << imageName << "\n";
+    return 100;
+}
+
+//Returns the height of an image
+int getHeight(const Scene &scene, string imageName){
+    if(!areImagesLoaded){
+        loadImages(scene);
+    }
+    for(auto image: Images){
+        if(image.name == imageName){
+            return image.height;
+        }
+    }
+    cout << "ERROR! couldn't find the image on width: "<<imageName<<"\n";
+    return 100;
+}
 
 Vec3f normalize(const Vec3f &v)
 {

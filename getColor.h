@@ -85,25 +85,58 @@ bool golgedemi(const Vec3f &pointToCheck,const Scene &scene,const PointLight &cu
 
     return false;
 };
+
 Vec3f addLight(const RayIntersect &rayIntersect,const Scene &scene,const Ray &ray, Vec3f pixelAsFloat){
     int numberOfLights = scene.point_lights.size();
     int materialId=1;
+    string deccal="";
+    Vec3f TextureColor;
     if(rayIntersect.shape.form == SPHERE){
         materialId = scene.spheres[rayIntersect.shape.id].material_id;
+        if (scene.spheres[rayIntersect.shape.id].texture_id >=0){
+        	deccal = scene.textures[scene.spheres[rayIntersect.shape.id].texture_id].decalMode;//Added newly
+        	string imname = scene.textures[scene.spheres[rayIntersect.shape.id].texture_id].imageName;
+        	TextureColor = texMapSphere(scene, scene.spheres[rayIntersect.shape.id], rayIntersect.shape.id, rayIntersect.intersectPoint, getWidth(scene, imname), getHeight(scene,imname));
+        }
     }
     if(rayIntersect.shape.form == TRIANGLE){
         materialId = scene.triangles[rayIntersect.shape.id].material_id;
+        if (scene.triangles[rayIntersect.shape.id].texture_id >=0){
+        	deccal = scene.textures[scene.triangles[rayIntersect.shape.id].texture_id].decalMode;//Added newly
+            string imname = scene.textures[scene.triangles[rayIntersect.shape.id].texture_id].imageName;
+        }
     }
     if(rayIntersect.shape.form == MESH){
         materialId = scene.meshes[rayIntersect.shape.id].material_id;
+        if (scene.meshes[rayIntersect.shape.id].texture_id >=0){
+        	deccal = scene.textures[scene.meshes[rayIntersect.shape.id].texture_id].decalMode;//Added newly
+            string imname = scene.textures[scene.meshes[rayIntersect.shape.id].texture_id].imageName;
+        }
     }
-
+	
     for(int i=0;i<numberOfLights;i++){
         PointLight currentLight = scene.point_lights[i];
         if(golgedemi(rayIntersect.intersectPoint, scene, currentLight)){ //Golgede kalmis do nothing
             //return pixelAsFloat;
         }else{  //isik vuruyor, o isiktan gelen isik degerlerini ekle
-            pixelAsFloat = Vec3fSum(pixelAsFloat, Diffuse(currentLight, scene.materials, materialId, rayIntersect));
+            
+            Vec3f dif = Diffuse(currentLight, scene.materials, materialId, rayIntersect);
+            if(deccal=="replace_kd"){
+                dif.x = dif.x / scene.materials[materialId].diffuse.x * (TextureColor.x/255);
+                dif.y = dif.y / scene.materials[materialId].diffuse.y * (TextureColor.y/255);
+                dif.z = dif.z / scene.materials[materialId].diffuse.z * (TextureColor.z/255);
+                pixelAsFloat = Vec3fSum(pixelAsFloat, dif);
+            }else if(deccal=="blend_kd"){
+                dif.x = dif.x / scene.materials[materialId].diffuse.x * ((TextureColor.x/255)+(scene.materials[materialId].diffuse.x))/2;
+                dif.y = dif.y / scene.materials[materialId].diffuse.y * ((TextureColor.y/255)+(scene.materials[materialId].diffuse.y))/2;
+                dif.z = dif.z / scene.materials[materialId].diffuse.z * ((TextureColor.z/255)+(scene.materials[materialId].diffuse.z))/2;
+                pixelAsFloat = Vec3fSum(pixelAsFloat, dif);
+            }else if(deccal=="replace_all"){
+                pixelAsFloat = Vec3fSum(pixelAsFloat, TextureColor);
+            }
+            else{
+                pixelAsFloat = Vec3fSum(pixelAsFloat, dif);
+            }
             pixelAsFloat = Vec3fSum(pixelAsFloat, Specular(currentLight, rayIntersect,ray, scene,materialId));
         }
     }

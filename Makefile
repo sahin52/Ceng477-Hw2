@@ -26,3 +26,5 @@ simple_transform:
 	make && ./raytracer "hw2_sample_scenes/simple_transform.xml"
 skybox:
 	make && ./raytracer "hw2_sample_scenes/skybox.xml"
+earth_and_moon:
+	make && ./raytracer "hw2_sample_scenes/earth_and_moon.xml"
