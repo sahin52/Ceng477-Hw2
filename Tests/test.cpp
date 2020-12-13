@@ -67,16 +67,31 @@ void jpegTest(Scene &scene){
     cout <<"anan\n";
     cout << anan<<"\n";
 }
+void numberTest(){
+    cout << "numberTest\n";
+    float a = 1./0.;
+    cout <<a<<"\n";
+    int anan = (int) a;
+    cout << anan<<endl;
+    char s = (char) anan;
+    cout << s<<"--"<<endl;
+    int i = 1/0;
+    cout << i<<"_-\n";
+    char c = (char)i;
+    cout << (int)c<<"--\n";
+    cout << c<<"__\n";
+
+}
 
 int main(int argc, char* argv[]){
     //rotateTest();
-    Scene scene;
-    p("1");
-    p(argv[1]);
-    scene.loadFromXml(argv[1]);
-    p("2");
-    // translate();
-    // scale();
-    jpegTest(scene);
-
+    // Scene scene;
+    // p("1");
+    // p(argv[1]);
+    // scene.loadFromXml(argv[1]);
+    // p("2");
+    // // translate();
+    // // scale();
+    // jpegTest(scene);
+    numberTest();
 }

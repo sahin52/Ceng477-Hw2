@@ -122,8 +122,11 @@ Vec3f addLight(const RayIntersect &rayIntersect,const Scene &scene,const Ray &ra
             
             Vec3f dif = Diffuse(currentLight, scene.materials, materialId, rayIntersect);
             if(deccal=="replace_kd"){
+                if(dif.x != 0.)
                 dif.x = dif.x / scene.materials[materialId].diffuse.x * (TextureColor.x/255);
+                if(dif.y != 0.)
                 dif.y = dif.y / scene.materials[materialId].diffuse.y * (TextureColor.y/255);
+                if(dif.z != 0.)
                 dif.z = dif.z / scene.materials[materialId].diffuse.z * (TextureColor.z/255);
                 pixelAsFloat = Vec3fSum(pixelAsFloat, dif);
             }else if(deccal=="blend_kd"){
