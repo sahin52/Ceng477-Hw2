@@ -1,5 +1,5 @@
 all:
-	g++ -v -pthread -O3  *.cpp -o raytracer -std=c++11 -ljpeg
+	rm raytracer && g++ -v -pthread -O3  *.cpp -o raytracer -std=c++11 -ljpeg
 run:
 	./raytracer "Sample Scenes/Input Files/simple.xml"
 testfile:
@@ -28,3 +28,7 @@ skybox:
 	make && ./raytracer "hw2_sample_scenes/skybox.xml"
 earth_and_moon:
 	make && ./raytracer "hw2_sample_scenes/earth_and_moon.xml"
+bilinear:
+	make && ./raytracer "MoreScenes/scenes/spheres_texture_bilinear.xml"
+nearest:
+	make && ./raytracer "MoreScenes/scenes/spheres_texture_nearest.xml"
