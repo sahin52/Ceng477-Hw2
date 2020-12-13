@@ -10,6 +10,38 @@ void rotateTest(){
     p(rot);
 }
 
+void texMapSphere(Scene scene, Sphere kure,int sphereId, Vec3f intersectionPoint, int nx, int ny ){
+	int i,j;
+	float theta, fi, r, x, y, z, u, v;
+	r = kure.radius;
+	Vec3f center = scene.vertex_data[kure.center_vertex_id];
+	x = intersectionPoint.x - center.x;
+	y = intersectionPoint.y - center.y;
+	z = intersectionPoint.z - center.z;
+
+	theta = acos(y/r);
+	fi = atan2(z,x);
+
+	u = (-fi + PI ) / (2*PI);
+	v = theta / PI;
+				//  where nx is texture width and ny is texture height
+	i =  (u*nx);
+	j =  (v*ny);
+	/*
+	if (scene.textures[scene.spheres[sphereId].texture_id].interpolation == "nearest"){
+		vec3f color = fetch(round(i),round(j))
+	}
+	else if (scene.textures[scene.spheres[sphereId].texture_id].interpolation == "bilinear"){
+		int p = floor(i);
+		int q = floor(j);
+		float dx = i-p;
+		float dx = j-q;
+		Vec3f color = Vec3fSum( ((p,q)*(1-dx)*(1-dy)), 
+						(Vec3fSum( ((p+1,q)*(dx)*(1-dy)), 
+							(Vec3fSum( ((p,q+1)*(1-dx)*(dy)),  ((p+1,q+1)*(dx)*(dy)) )) )) )
+	}					// (p,q) lar değiştirilecek   TODOOOOOOOOOOOOOOO
+	*/
+}
 void jpegTest(Scene &scene){
     char * filename = "earth_hd.jpg";
     string str = scene.textures[0].imageName;

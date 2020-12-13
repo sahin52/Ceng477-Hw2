@@ -46,10 +46,15 @@ Scene idleriDuzelt(Scene &scene){//TODO transformaiton idleri
         //     scene.triangles[i].transformasyonlar[j].id--;    
         // }
     }
+    p("SPHERES:");
     for(int i=0;i<scene.spheres.size();i++){
+        p("SPHERE ilk");
+        p(scene.spheres[i]);
         scene.spheres[i].center_vertex_id--;
         scene.spheres[i].material_id--;
         scene.spheres[i].texture_id--;
+        p("SPHERE son");
+        p(scene.spheres[i]);
         //scene.triangles[i].transformasyonlar = getTransformationVectorFromString(scene.spheres[i].transformations);
         // for(int j=0;j<scene.spheres[i].transformasyonlar.size();j++){//This will be done in transformationVector function
         //     scene.spheres[i].transformasyonlar[j].id--;    
@@ -103,7 +108,13 @@ void threadable(int i, int to,const Scene &scene,const RaySabitleri &raySabitler
             //     std::cout << ray.yon.z << std::endl;
             // }
             //TODO transformasyonlari burada uygula
-            Vec3i pixel = checkWhatCollides(ray,scene);//bir pixel
+            Vec3i pixel;
+            try{
+            pixel = checkWhatCollides(ray,scene);//bir pixel
+            }catch(const std::exception& e){
+                std::cout << e.what();
+                throw(e);
+            };
 
             image[i*width*3+3*j  ] =(unsigned char)  pixel.x; 
             image[i*width*3+3*j+1] =(unsigned char)  pixel.y;

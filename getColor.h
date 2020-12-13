@@ -1,6 +1,7 @@
 #ifndef __GETCOLOR__
 #define __GETCOLOR__
 #include "checkShapes.h"
+#include "tm.h"
 //#include "generateRays.cpp"
 using namespace std;
 using namespace parser;
@@ -84,7 +85,7 @@ bool golgedemi(const Vec3f &pointToCheck,const Scene &scene,const PointLight &cu
 
     return false;
 };
-Vec3f addLightFromLightSources(const RayIntersect &rayIntersect,const Scene &scene,const Ray &ray, Vec3f pixelAsFloat){
+Vec3f addLight(const RayIntersect &rayIntersect,const Scene &scene,const Ray &ray, Vec3f pixelAsFloat){
     int numberOfLights = scene.point_lights.size();
     int materialId=1;
     if(rayIntersect.shape.form == SPHERE){
@@ -198,7 +199,7 @@ Vec3f getColorOfTheIntersection(const RayIntersect &rayIntersect,const Scene &sc
     pixelAsFloat.y = scene.ambient_light.y* scene.materials[materialId].ambient.y;
     pixelAsFloat.z = scene.ambient_light.z* scene.materials[materialId].ambient.z;
     if(rayIntersect.isThereIntersect) 
-    pixelAsFloat = addLightFromLightSources(rayIntersect, scene, ray, pixelAsFloat);
+    pixelAsFloat = addLight(rayIntersect, scene, ray, pixelAsFloat);
     //pixelAsFloat = addMirroring(pixelAsFloat);
     //Get the light from the light sources,
     pixelAsFloat = addTheYansimas(rayIntersect, scene, ray, pixelAsFloat,max_recursion_depth);

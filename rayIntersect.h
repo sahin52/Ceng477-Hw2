@@ -27,6 +27,7 @@ struct RayIntersect{
     bool isThereIntersect;//false ise bg
     Vec3f intersectPoint;
     Vec3f normal;
+    float beta, gamma ;
 };
 Shape emptyshape;
 Vec3f emptyPoint;

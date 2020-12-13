@@ -82,10 +82,12 @@ void p(const std::vector<Face> &faces){
 }
 void p(const Mesh &mesh){
     p(" mesh: ");
-    p(" faces: ");
+    p("      faces: ");
     p(mesh.faces);
-    p(" material_id: ");
+    p("      material_id: ");
     p(mesh.material_id);
+    p("      Texture Id: ");
+    p(mesh.texture_id);
 }
 void p(const std::vector<Mesh>& meshes){
     for(int i=0;i<meshes.size();i++){
@@ -103,6 +105,8 @@ void p(const Sphere &s){
     p(s.material_id);
     p(" radius: ");
     p(s.radius);
+    p("texture: ");
+    p(s.texture_id);
 }
 
 void p(const Triangle &t){

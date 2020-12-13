@@ -58,7 +58,7 @@ vector<Image> loadImages(const Scene &scene){
     return res;
 }
 
-Vec3f fetch(const Scene &scene, std::string imageName, int row, int column){
+Vec3f fetch(const Scene &scene, std::string imageName, int column, int row){
     if(!areImagesLoaded){
         loadImages(scene);
     }
