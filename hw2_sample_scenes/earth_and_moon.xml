@@ -45,6 +45,7 @@
             <PhongExponent>100</PhongExponent>
         </Material>
         <Material id="4">
+            <!-- MOON -->
             <AmbientReflectance>1 1 1</AmbientReflectance>
             <DiffuseReflectance>0 1 1</DiffuseReflectance>
             <SpecularReflectance>1 1 1</SpecularReflectance>
@@ -79,6 +80,7 @@
             <Appearance>clamp</Appearance>
         </Texture>
         <Texture id="2">
+            <!-- MOON -->
             <ImageName>textures/moon.jpg</ImageName>
             <Interpolation>bilinear</Interpolation>
             <DecalMode>replace_kd</DecalMode>
@@ -112,6 +114,7 @@
             <Radius>5</Radius>
         </Sphere>
         <Sphere id="2">
+            <!-- MOON -->
             <Material>4</Material>
             <Texture>2</Texture>
             <Transformations>t4 s4 t5</Transformations>
