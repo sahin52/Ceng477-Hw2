@@ -18,18 +18,42 @@ Vec3f Irradiance(const PointLight &light,const Vec3f &point){
     return res;
 }
 
-Vec3f Diffuse(const PointLight &light, const std::vector<Material> &materials,const  int &mat_id,const RayIntersect &ray){
-
+Vec3f Diffuse(const PointLight &light, const std::vector<Material> &materials,const  int &mat_id,const RayIntersect &ray, string decalMode, Vec3f textureColor){
     Vec3f irradiance = Irradiance(light, ray.intersectPoint);
     Vec3f w_i = normalize(Vec3fminus(light.position, ray.intersectPoint));
     Vec3f n = normalize(ray.normal);
     float cos = max(0.0f, dotProduct(w_i, n)) ;
 
-    return {
-        .x =  materials[mat_id].diffuse.x * cos * irradiance.x ,
-        .y =  materials[mat_id].diffuse.y * cos * irradiance.y ,
-        .z =  materials[mat_id].diffuse.z * cos * irradiance.z ,
+    Vec3f materialDiffuse = {
+        .x =  materials[mat_id].diffuse.x,
+        .y =  materials[mat_id].diffuse.y,
+        .z =  materials[mat_id].diffuse.z
     };
+
+    if(decalMode == "replace_kd"){
+        return {
+            .x =  textureColor.x/255. * cos * irradiance.x ,
+            .y =  textureColor.y/255. * cos * irradiance.y ,
+            .z =  textureColor.z/255. * cos * irradiance.z ,
+        };
+    }else if(decalMode=="blend_kd"){
+        Vec3f kd_plus_c_over_2 = {
+            .x = (textureColor.x/255. + materialDiffuse.x)/2.,
+            .y = (textureColor.y/255. + materialDiffuse.y)/2.,
+            .z = (textureColor.z/255. + materialDiffuse.z)/2.
+        };
+        return Vec3fMultiply(Vec3fMultiply(kd_plus_c_over_2,irradiance),cos);
+        
+    }else if(decalMode=="replace_all"){
+        return textureColor;
+    }
+    else{
+        return {
+            .x =  materials[mat_id].diffuse.x * cos * irradiance.x ,
+            .y =  materials[mat_id].diffuse.y * cos * irradiance.y ,
+            .z =  materials[mat_id].diffuse.z * cos * irradiance.z ,
+        };
+    }
 }
 
 Vec3f Specular(const PointLight &light,const  RayIntersect &rayIntersect, Ray ray,const  Scene &scene,const  int &mat_id){
@@ -120,26 +144,8 @@ Vec3f addLight(const RayIntersect &rayIntersect,const Scene &scene,const Ray &ra
             //return pixelAsFloat;
         }else{  //isik vuruyor, o isiktan gelen isik degerlerini ekle
             
-            Vec3f dif = Diffuse(currentLight, scene.materials, materialId, rayIntersect);
-            if(deccal=="replace_kd"){
-                if(dif.x != 0.)
-                dif.x = dif.x / scene.materials[materialId].diffuse.x * (TextureColor.x/255);
-                if(dif.y != 0.)
-                dif.y = dif.y / scene.materials[materialId].diffuse.y * (TextureColor.y/255);
-                if(dif.z != 0.)
-                dif.z = dif.z / scene.materials[materialId].diffuse.z * (TextureColor.z/255);
-                pixelAsFloat = Vec3fSum(pixelAsFloat, dif);
-            }else if(deccal=="blend_kd"){
-                dif.x = dif.x / scene.materials[materialId].diffuse.x * ((TextureColor.x/255)+(scene.materials[materialId].diffuse.x))/2;
-                dif.y = dif.y / scene.materials[materialId].diffuse.y * ((TextureColor.y/255)+(scene.materials[materialId].diffuse.y))/2;
-                dif.z = dif.z / scene.materials[materialId].diffuse.z * ((TextureColor.z/255)+(scene.materials[materialId].diffuse.z))/2;
-                pixelAsFloat = Vec3fSum(pixelAsFloat, dif);
-            }else if(deccal=="replace_all"){
-                pixelAsFloat = Vec3fSum(pixelAsFloat, TextureColor);
-            }
-            else{
-                pixelAsFloat = Vec3fSum(pixelAsFloat, dif);
-            }
+            Vec3f diffuse = Diffuse(currentLight, scene.materials, materialId, rayIntersect,deccal,TextureColor);
+            pixelAsFloat = Vec3fSum(pixelAsFloat, diffuse);
             pixelAsFloat = Vec3fSum(pixelAsFloat, Specular(currentLight, rayIntersect,ray, scene,materialId));
         }
     }
