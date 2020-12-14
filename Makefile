@@ -1,5 +1,5 @@
 all:
-	rm raytracer && g++ -v -pthread -O3  *.cpp -o raytracer -std=c++11 -ljpeg
+	g++ -v -pthread -O3  *.cpp -o raytracer -std=c++11 -ljpeg
 run:
 	./raytracer "Sample Scenes/Input Files/simple.xml"
 testfile:

@@ -193,8 +193,6 @@ void generateImages(const Scene &scene){
         t2.join();
         t3.join();
         t4.join();
-        // thread anan = thread(tmpthreadable);
-        // anan.join();
         p("Generating image: "+scene.cameras[cam].image_name);
         write_ppm(scene.cameras[cam].image_name.c_str(), image, scene.cameras[cam].image_width,scene.cameras[cam].image_height);
 

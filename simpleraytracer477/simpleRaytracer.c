@@ -381,7 +381,6 @@ void writeImage(char *fileName)
 
 int main(int argc, char **argv)
 {
-	printf("anan\n");
     char comm[200];
     int i,j,k;
     if (argc<3) {

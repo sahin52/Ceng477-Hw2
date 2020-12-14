@@ -47,7 +47,6 @@ Vec3f texMapSphere(Scene scene, Sphere kure,int sphereId, Vec3f intersectionPoin
 } 
 
 Vec3f texMapTriangle(RayIntersect rayinter,Scene scene, int ucgen_id, Vec3f intersectionPoint ){
-	//Sadece Mesh icin yaziyoruz, sikerler ayol
 	
 
 

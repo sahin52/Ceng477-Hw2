@@ -27,10 +27,8 @@ RayIntersect checkOneSphere(const Ray &ray,const Sphere &sphere,const  int &shap
     auto c = dotProduct(ray_origin_to_sp_center,ray_origin_to_sp_center) - radius*radius;
     float discriminant = b*b - 4.0*a*c;
     if(discriminant<0){
-        // string anan = "No hit to the sphere " + to_string(radius) + " by the ray: "+ to_string(ray.start.x) 
         // +" "+ to_string(ray.start.y)  +" "+ to_string(ray.start.z)  +" "+ to_string(ray.yon.x)  +" "+ to_string(ray.yon.y)  +" "+ to_string(ray.yon.z)
         //  ;
-        //p(anan);
         RayIntersect rayIntersect;
         rayIntersect.isThereIntersect = false;
         return rayIntersect;
