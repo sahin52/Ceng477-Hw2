@@ -131,6 +131,10 @@ Vec3f Vec3fMultiply(const Vec3f &vec,const  float &sayi){
     res.z = vec.z*sayi;
     return res;
 }
+
+Vec3f multiply(const float &sayi, const Vec3f &vec ){
+    return Vec3fMultiply(vec,sayi);
+}
 Vec3f Vec3fSum(const Vec3f &v1,const  Vec3f &v2){
     Vec3f res;
     res.x = v1.x+v2.x;
