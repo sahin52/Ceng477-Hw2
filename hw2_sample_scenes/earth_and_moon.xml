@@ -27,12 +27,14 @@
 
     <Materials>
         <Material id="1">
+            <!-- MESH-->
             <AmbientReflectance>1 1 1</AmbientReflectance>
             <DiffuseReflectance>1 1 1</DiffuseReflectance>
             <SpecularReflectance>1 1 1</SpecularReflectance>
             <PhongExponent>1</PhongExponent>
         </Material>
         <Material id="2">
+            <!-- Earth -->
             <AmbientReflectance>1 1 1</AmbientReflectance>
             <DiffuseReflectance>1 0 0</DiffuseReflectance>
             <SpecularReflectance>1 1 1</SpecularReflectance>
@@ -74,6 +76,7 @@
 
     <Textures>
         <Texture id="1">
+            <!-- Earth -->
             <ImageName>textures/earth_hd.jpg</ImageName>
             <Interpolation>nearest</Interpolation>
             <DecalMode>replace_all</DecalMode>
@@ -107,6 +110,7 @@
             </Faces>
         </Mesh>
         <Sphere id="1">
+            <!-- Earth -->
             <Material>2</Material>
             <Texture>1</Texture>
             <Transformations>t2 s3 r1 t3</Transformations>
